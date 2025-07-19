@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+.Python
+env/
+venv/
+# Django
+db.sqlite3
+db.json
+media/
+static_root/
+.idea/
+.env
+*.log
+.python-version
+

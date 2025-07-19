@@ -1,0 +1,49 @@
+services:
+  - type: web
+    # Укажите ТОЧНОЕ имя вашего веб-сервиса на Render. Придумайте его сейчас.
+    # Например: 'hotel-booking-app-web' или 'market-project-deploy'
+    name: my_market_prj_db_deploy
+    env: python
+
+    # Команда сборки: устанавливает зависимости из requirements.txt и собирает статические файлы
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+
+    # Команда, которая будет выполняться ПЕРЕД каждым деплоем:
+    # 1. Применяет миграции базы данных.
+    # 2. Создает суперпользователя (admin/admin@example.com) при первом деплое.
+    #    ' || true' позволяет команде не прерывать деплой, если суперпользователь уже существует.
+    preDeployCommand: "python manage.py migrate --noinput && python manage.py createsuperuser --noinput --username admin --email admin@example.com || true"
+
+    # Команда запуска вашего приложения Gunicorn
+    startCommand: "gunicorn market_prj.wsgi:application --bind 0.0.0.0:$PORT --log-file -"
+
+    # Переменные окружения, которые Render будет брать из своих настроек UI
+    envVars:
+      # DATABASE_URL будет автоматически синхронизирован из настроек вашей БД на Render
+      - key: DATABASE_URL
+        fromDatabase:
+          # Укажите ТОЧНОЕ имя вашей базы данных на Render. Придумайте его сейчас.
+          # Например: 'hotel-booking-app-db'
+          name: market_prj_db_deploytest
+
+      # Эти переменные вы вручную добавите в UI Render (позже)
+      - key: SECRET_KEY
+        sync: false
+      - key: DEBUG_VALUE
+        sync: false
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_SECRET
+        sync: false
+    # Если в будущем настроите S3 для медиафайлов, здесь появятся дополнительные envVars для AWS S3
+
+# Определение вашей базы данных для Render
+databases:
+  - # Укажите ТО ЖЕ уникальное имя вашей базы данных, что и выше
+    name: market_prj_db_deploytest
+    plan: free # Ваш текущий план базы данных (например, free)
+    # Укажите регион для базы данных. Выберите ближайший к вашим пользователям, например:
+    # frankfurt (Германия), oregon (США), ohio (США), singapore (Сингапур)
+    region: oregon
