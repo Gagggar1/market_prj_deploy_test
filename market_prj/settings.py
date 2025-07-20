@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False  #os.environ.get('DEBUG_VALUE', 'False') == 'True'  #True
 
 # ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')  #['my-market-prj-db-deploy.onrender.com']
+ALLOWED_HOSTS = ['my-market-prj-db-deploy.onrender.com'] #os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 # Application definition
 
 INSTALLED_APPS = [
